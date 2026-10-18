@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: powerfit_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5433:5432"
+    volumes:
+      - powerfit_data:/var/lib/postgresql
+
+volumes:
+  powerfit_data:
