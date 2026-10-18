@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, ParseIntPipe, } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, ParseIntPipe, } from '@nestjs/common';
 import { ClientesService } from './clientes.service.js';
 import { Cliente } from '../entidades/cliente.entity.js';
 
@@ -13,10 +13,38 @@ export class ClientesController {
         return this.clientesService.findAll();
     }
 
+    @Get('view-membresia')
+    findAllWithMembresia() {
+        return this.clientesService.findAllWithMembresia();
+    }
+
+
+    @Get('find-by-membresia')
+    findByMembresia(@Query('nombre') nombre: string) {
+        return this.clientesService.findByMembresia(nombre);
+    }
+
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
         return this.clientesService.findOne(id);
     }
+
+
+    @Post('transaccion')
+    registrarTransaccion(
+        @Body() data: {
+            id_cliente: number;
+            id_membresia: number;
+            nuevo_precio: number;
+        },
+    ) {
+        return this.clientesService.registrarPagoYActualizarMembresia(
+            data.id_cliente,
+            data.id_membresia,
+            data.nuevo_precio,
+        );
+    }
+        
 
     @Post()
     create(@Body() data: Partial<Cliente>) {
